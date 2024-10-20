@@ -3,25 +3,22 @@
 
 #include "CryptRaider/Public/TriggerComponent.h"
 
-#include "MovieSceneTracksComponentTypes.h"
-
 UTriggerComponent::UTriggerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	
 }
 
 void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
+                                      FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+
 	AActor* AcceptableActor = GetAcceptableActor();
 	// Unlock
-	if(AcceptableActor != nullptr)
+	if (AcceptableActor != nullptr)
 	{
 		UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(AcceptableActor->GetRootComponent());
-		if(PrimitiveComponent != nullptr)
+		if (PrimitiveComponent != nullptr)
 		{
 			PrimitiveComponent->SetSimulatePhysics(false);
 		}
@@ -33,13 +30,11 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	{
 		Mover->SetMove(false);
 	}
-	
 }
 
 void UTriggerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 AActor* UTriggerComponent::GetAcceptableActor() const
@@ -48,7 +43,9 @@ AActor* UTriggerComponent::GetAcceptableActor() const
 	GetOverlappingActors(Actors);
 	for (AActor* Actor : Actors)
 	{
-		if(Actor->ActorHasTag(UnlockTag))
+		const bool IsHasUnlock = Actor->ActorHasTag(UnlockTag);
+		const bool IsGrabbed = Actor->ActorHasTag(GrabbedTag);
+		if (IsHasUnlock == true && IsGrabbed == false)
 		{
 			return Actor;
 		}

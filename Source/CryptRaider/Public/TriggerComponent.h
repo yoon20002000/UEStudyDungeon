@@ -16,7 +16,9 @@ class CRYPTRAIDER_API UTriggerComponent : public UBoxComponent
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	FName UnlockTag;
+	FName UnlockTag = FName("Unlock1");
+	UPROPERTY(EditAnywhere)
+	FName GrabbedTag = FName("Grabbed");
 	TObjectPtr<UMover> Mover;
 public:
 	UTriggerComponent();
