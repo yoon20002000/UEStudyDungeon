@@ -9,7 +9,7 @@
 #include "Grabber.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CRYPTRAIDER_API UGrabber : public USceneComponent
 {
 	GENERATED_BODY()
@@ -21,7 +21,8 @@ private:
 	float GrabRadius = 100.0f;
 	UPROPERTY(EditAnywhere)
 	float HoldDistance = 200.0f;
-public:	
+
+public:
 	// Sets default values for this component's properties
 	UGrabber();
 
@@ -29,14 +30,16 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable)
 	void Release();
 	UFUNCTION(BlueprintCallable)
 	void Grab();
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
+
 private:
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
 };
