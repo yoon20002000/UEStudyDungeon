@@ -73,7 +73,11 @@ void UGrabber::Grab()
 		DrawDebugSphere(World,HitResult.Location,10,10,FColor::Red, false, 5);
 		DrawDebugSphere(World,HitResult.ImpactPoint,10,10,FColor::Yellow, false, 5);
 		UPrimitiveComponent* PrimitiveComponent =  HitResult.GetComponent();
-		HitResult.GetActor()->Tags.Add("Grabbed");
+		PrimitiveComponent->SetSimulatePhysics(true);
+		PrimitiveComponent->WakeAllRigidBodies();
+		AActor* HitActor = HitResult.GetActor();
+		HitActor->Tags.Add("Grabbed");
+		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		PhysicsHandler->GrabComponentAtLocationWithRotation(
 			PrimitiveComponent,
 			NAME_None,
