@@ -55,6 +55,12 @@ void UGrabber::Release()
 
 	if(PrimitiveComponent != nullptr)
 	{
+		AActor* Owner = PrimitiveComponent->GetOwner();
+		if(Owner != nullptr)
+		{
+			Owner->Tags.Remove("Grabbed");	
+		}
+		
 		PrimitiveComponent->WakeAllRigidBodies();
 		PhysicsHandler->ReleaseComponent();
 	}
@@ -77,7 +83,7 @@ void UGrabber::Grab()
 		DrawDebugSphere(World,HitResult.Location,10,10,FColor::Red, false, 5);
 		DrawDebugSphere(World,HitResult.ImpactPoint,10,10,FColor::Yellow, false, 5);
 		UPrimitiveComponent* PrimitiveComponent =  HitResult.GetComponent();
-		
+		HitResult.GetActor()->Tags.Add("Grabbed");
 		PhysicsHandler->GrabComponentAtLocationWithRotation(
 			PrimitiveComponent,
 			NAME_None,

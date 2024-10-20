@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
+#include "CryptRaider/Mover.h"
 #include "TriggerComponent.generated.h"
 
 /**
@@ -16,11 +17,16 @@ class CRYPTRAIDER_API UTriggerComponent : public UBoxComponent
 public:
 	UPROPERTY(EditAnywhere)
 	FName UnlockTag;
+	TObjectPtr<UMover> Mover;
 public:
 	UTriggerComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 							   FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(BlueprintCallable)
+	void SetMover(UMover* InMover);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+private:
+	AActor* GetAcceptableActor() const;
 };

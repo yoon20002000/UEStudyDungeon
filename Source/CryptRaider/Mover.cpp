@@ -43,3 +43,12 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 	// ...
 }
 
+void UMover::SetMove(const bool InIsSwitchOn)
+{
+	if(IsSwitchOn == InIsSwitchOn)
+	{
+		return;
+	}
+	IsSwitchOn = InIsSwitchOn;
+}
+

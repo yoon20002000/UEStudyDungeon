@@ -3,6 +3,8 @@
 
 #include "CryptRaider/Public/TriggerComponent.h"
 
+#include "MovieSceneTracksComponentTypes.h"
+
 UTriggerComponent::UTriggerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -13,19 +15,48 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	TArray<AActor*> Actors;
-	GetOverlappingActors(Actors);
-	for (const AActor* Actor : Actors)
+	
+	AActor* AcceptableActor = GetAcceptableActor();
+	// Unlock
+	if(AcceptableActor != nullptr)
 	{
-		if(Actor->ActorHasTag(UnlockTag))
+		UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(AcceptableActor->GetRootComponent());
+		if(PrimitiveComponent != nullptr)
 		{
-			UE_LOG(LogTemp, Log, TEXT("Unlocking Key"));
+			PrimitiveComponent->SetSimulatePhysics(false);
 		}
+		AcceptableActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);;
+		Mover->SetMove(true);
 	}
+	// Lock
+	else
+	{
+		Mover->SetMove(false);
+	}
+	
 }
 
 void UTriggerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+AActor* UTriggerComponent::GetAcceptableActor() const
+{
+	TArray<AActor*> Actors;
+	GetOverlappingActors(Actors);
+	for (AActor* Actor : Actors)
+	{
+		if(Actor->ActorHasTag(UnlockTag))
+		{
+			return Actor;
+		}
+	}
+	return nullptr;
+}
+
+void UTriggerComponent::SetMover(UMover* InMover)
+{
+	Mover = InMover;
 }
